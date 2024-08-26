@@ -22,4 +22,4 @@ jobs:
 
     - name: Run script
       run: |
-        python trading.py  # Assurez-vous que ce chemin est correct
+        python trading.py
