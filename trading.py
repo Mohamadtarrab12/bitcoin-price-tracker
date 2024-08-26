@@ -19,13 +19,13 @@ def load_config(filename):
     }
 
 def fetch_bitcoin_price(symbol):
-    """Récupère le prix du Bitcoin depuis l'API Binance."""
-    url = f"https://api.binance.com/api/v3/ticker/price?symbol={symbol}"
+    """Récupère le prix du Bitcoin depuis l'API CoinGecko."""
+    url = f"https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies={symbol}"
     try:
         response = requests.get(url)
         response.raise_for_status()  # Assure que la réponse est réussie
         data = response.json()
-        return data['price']
+        return data['bitcoin'][symbol]
     except requests.RequestException as e:
         print(f"Erreur lors de la récupération des données : {e}")
         return None
