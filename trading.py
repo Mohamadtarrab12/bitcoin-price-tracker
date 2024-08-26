@@ -29,20 +29,27 @@ def fetch_bitcoin_price():
 
 def write_to_csv(file_path, price):
     """Écrit les données dans un fichier CSV."""
-    print(f"Écriture dans : {file_path}")  # Débogage
-    if price:
-        with open(file_path, mode='a', newline='') as file:
-            writer = csv.writer(file, delimiter=',')
-            writer.writerow([datetime.now().isoformat(), price])
-        print("Données écrites dans le fichier avec succès.")
-    else:
-        print("Aucune donnée à écrire.")
+    # Vérifie si le fichier existe
+    if not os.path.isfile(file_path):
+        print(f"Erreur : Le fichier {file_path} n'existe pas.")
+        return
 
+    # Ouvre le fichier en mode 'a' (append) pour ajouter des données
+    with open(file_path, mode='a', newline='') as file:
+        writer = csv.writer(file)
+
+        # Écrit l'en-tête uniquement si le fichier est nouveau
+        if os.path.getsize(file_path) == 0:  # Vérifie si le fichier est vide
+            writer.writerow(['DateTime', 'BitcoinPrice'])
+        
+        # Écrit les nouvelles données
+        writer.writerow([datetime.now().isoformat(), price])
+
+    print("Données écrites dans le fichier avec succès.")
 
 def main():
     """Fonction principale qui coordonne la récupération et l'écriture des données."""
     config = load_config(config_path)
-    print(f"Configuration chargée : {config}")  # Débogage
     bitcoin_price = fetch_bitcoin_price()
     write_to_csv(config['output_file'], bitcoin_price)
 
