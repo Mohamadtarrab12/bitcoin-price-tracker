@@ -1,8 +1,6 @@
 name: Run Python Script
 
 on:
-  schedule:
-    - cron: '* * * * *'  # Exécute toutes les heures
   workflow_dispatch:  # Permet l'exécution manuelle
 
 jobs:
