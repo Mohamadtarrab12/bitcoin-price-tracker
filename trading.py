@@ -29,6 +29,7 @@ def fetch_bitcoin_price():
 
 def write_to_csv(file_path, price):
     """Écrit les données dans un fichier CSV."""
+    print(f"Écriture dans : {file_path}")  # Débogage
     if price:
         with open(file_path, mode='a', newline='') as file:
             writer = csv.writer(file)
@@ -40,6 +41,7 @@ def write_to_csv(file_path, price):
 def main():
     """Fonction principale qui coordonne la récupération et l'écriture des données."""
     config = load_config(config_path)
+    print(f"Configuration chargée : {config}")  # Débogage
     bitcoin_price = fetch_bitcoin_price()
     write_to_csv(config['output_file'], bitcoin_price)
 
