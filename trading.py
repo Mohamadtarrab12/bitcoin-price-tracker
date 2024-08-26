@@ -1,6 +1,6 @@
-import csv
 import configparser
 import requests
+import csv
 from datetime import datetime
 import os
 
@@ -15,38 +15,33 @@ def load_config(filename):
         'output_file': config.get('files', 'output_file')
     }
 
-def fetch_bitcoin_price(symbol):
+def fetch_bitcoin_price():
     """Récupère le prix du Bitcoin depuis l'API CoinGecko."""
-    url = f"https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies={symbol}"
+    url = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=eur"
     try:
         response = requests.get(url)
-        response.raise_for_status()  # Assure que la réponse est réussie
+        response.raise_for_status()
         data = response.json()
-        return data['bitcoin'][symbol]
+        return data['bitcoin']['eur']
     except requests.RequestException as e:
         print(f"Erreur lors de la récupération des données : {e}")
         return None
 
-def write_to_file(filename, price):
+def write_to_csv(file_path, price):
     """Écrit les données dans un fichier CSV."""
-    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    row = [current_time, price]
-
-    file_exists = os.path.isfile(filename)
-    with open(filename, 'a', newline='') as file:
-        writer = csv.writer(file)
-        if not file_exists:
-            writer.writerow(["DateTime", "BitcoinPrice"])
-        writer.writerow(row)
-    print("Données écrites dans le fichier avec succès.")
+    if price:
+        with open(file_path, mode='a', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow([datetime.now().isoformat(), price])
+        print("Données écrites dans le fichier avec succès.")
+    else:
+        print("Aucune donnée à écrire.")
 
 def main():
-    """Fonction principale qui coordonne la récupération et l'insertion des données."""
+    """Fonction principale qui coordonne la récupération et l'écriture des données."""
     config = load_config(config_path)
-    bitcoin_price = fetch_bitcoin_price("eur")
-    
-    if bitcoin_price:
-        write_to_file(config['output_file'], bitcoin_price)
+    bitcoin_price = fetch_bitcoin_price()
+    write_to_csv(config['output_file'], bitcoin_price)
 
 if __name__ == "__main__":
     main()
