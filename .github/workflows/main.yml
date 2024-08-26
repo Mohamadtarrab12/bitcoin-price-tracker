@@ -1,7 +1,7 @@
 name: Run Python Script
 
 on:
-  workflow_dispatch:  # Permet le déclenchement manuel
+  workflow_dispatch:  
 
 jobs:
   run-script:
@@ -14,7 +14,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.12.5'
+        python-version: '3.12.5'  # Spécifiez la version de Python souhaitée
 
     - name: Install dependencies
       run: |
@@ -23,3 +23,7 @@ jobs:
     - name: Run script
       run: |
         python trading.py
+
+    - name: Check CSV file content
+      run: |
+        cat bitcoin_price_history.csv
