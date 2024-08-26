@@ -32,11 +32,12 @@ def write_to_csv(file_path, price):
     print(f"Écriture dans : {file_path}")  # Débogage
     if price:
         with open(file_path, mode='a', newline='') as file:
-            writer = csv.writer(file)
+            writer = csv.writer(file, delimiter=',')
             writer.writerow([datetime.now().isoformat(), price])
         print("Données écrites dans le fichier avec succès.")
     else:
         print("Aucune donnée à écrire.")
+
 
 def main():
     """Fonction principale qui coordonne la récupération et l'écriture des données."""
