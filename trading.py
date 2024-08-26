@@ -3,7 +3,7 @@ import requests
 import csv
 from datetime import datetime
 import os
- 
+
 # Chemin vers le fichier de configuration
 config_path = os.path.join(os.path.dirname(__file__), 'config.ini')
 
