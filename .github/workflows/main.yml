@@ -22,7 +22,7 @@ jobs:
 
     - name: Run script
       run: |
-        python path/to/your_script.py
+        python path/to/trading.py
 
     - name: Commit and push changes
       uses: EndBug/add-and-commit@v7
