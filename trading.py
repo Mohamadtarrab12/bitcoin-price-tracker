@@ -61,7 +61,7 @@ def insert_data(conn, price):
 def main():
     """Fonction principale qui coordonne la récupération et l'insertion des données."""
     config = load_config(config_path)
-    bitcoin_price = fetch_bitcoin_price("BTCEUR")
+    bitcoin_price = fetch_bitcoin_price("eur")
     
     if bitcoin_price:
         conn = connect_to_db(config)
