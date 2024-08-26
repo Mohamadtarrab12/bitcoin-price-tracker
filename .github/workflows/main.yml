@@ -1,10 +1,15 @@
 name: Run Python Script
 
 on:
+<<<<<<< HEAD
   schedule:
     - cron: '0 * * * *'   # Exécute toutes les heures
   workflow_dispatch:  
   
+=======
+  workflow_dispatch:  # Permet l'exécution manuelle
+
+>>>>>>> 6b98930b4313e35349adcf56ab84b3606c2db8c0
 jobs:
   run-script:
     runs-on: ubuntu-latest
@@ -24,6 +29,7 @@ jobs:
 
     - name: Run script
       run: |
+<<<<<<< HEAD
         python path/to/your_script.py
 
     - name: Commit and push changes
@@ -33,3 +39,6 @@ jobs:
         message: 'Update bitcoin price'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+=======
+        python trading.py
+>>>>>>> 6b98930b4313e35349adcf56ab84b3606c2db8c0
