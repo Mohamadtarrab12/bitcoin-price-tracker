@@ -1,6 +1,7 @@
+import csv
 import configparser
 import requests
-import psycopg2
+from datetime import datetime
 import os
 
 # Chemin vers le fichier de configuration
@@ -11,11 +12,7 @@ def load_config(filename):
     config = configparser.ConfigParser()
     config.read(filename)
     return {
-        'dbname': config.get('database', 'dbname'),
-        'user': config.get('database', 'user'),
-        'password': config.get('database', 'password'),
-        'host': config.get('database', 'host'),
-        'port': config.get('database', 'port')
+        'output_file': config.get('files', 'output_file')
     }
 
 def fetch_bitcoin_price(symbol):
@@ -30,33 +27,18 @@ def fetch_bitcoin_price(symbol):
         print(f"Erreur lors de la récupération des données : {e}")
         return None
 
-def connect_to_db(config):
-    """Établit une connexion à la base de données PostgreSQL."""
-    try:
-        return psycopg2.connect(
-            dbname=config['dbname'],
-            user=config['user'],
-            password=config['password'],
-            host=config['host'],
-            port=config['port']
-        )
-    except psycopg2.Error as e:
-        print(f"Erreur lors de la connexion à la base de données : {e}")
-        return None
+def write_to_file(filename, price):
+    """Écrit les données dans un fichier CSV."""
+    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    row = [current_time, price]
 
-def insert_data(conn, price):
-    """Insère les données dans la table PostgreSQL."""
-    insert_query = """
-    INSERT INTO dev.bitcoin(prix)
-    VALUES (%s);
-    """
-    try:
-        with conn.cursor() as cursor:
-            cursor.execute(insert_query, (price,))
-            conn.commit()
-            print("Données insérées avec succès.")
-    except psycopg2.Error as e:
-        print(f"Erreur lors de l'insertion des données : {e}")
+    file_exists = os.path.isfile(filename)
+    with open(filename, 'a', newline='') as file:
+        writer = csv.writer(file)
+        if not file_exists:
+            writer.writerow(["DateTime", "BitcoinPrice"])
+        writer.writerow(row)
+    print("Données écrites dans le fichier avec succès.")
 
 def main():
     """Fonction principale qui coordonne la récupération et l'insertion des données."""
@@ -64,11 +46,7 @@ def main():
     bitcoin_price = fetch_bitcoin_price("eur")
     
     if bitcoin_price:
-        conn = connect_to_db(config)
-        
-        if conn:
-            insert_data(conn, bitcoin_price)
-            conn.close()
+        write_to_file(config['output_file'], bitcoin_price)
 
 if __name__ == "__main__":
     main()
