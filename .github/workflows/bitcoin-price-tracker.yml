@@ -2,7 +2,7 @@ name: Run Python Script
 
 on:
   schedule:
-    - cron: '* * * * *'   # Exécute toutes les heures
+    - cron: '0 * * * *'   # Exécute toutes les heures
 
 jobs:
   run-script:
@@ -15,7 +15,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: 'Python 3.12.5'  # Spécifiez la version de Python souhaitée
+        python-version: '3.12.5'  # Spécifiez la version de Python souhaitée
 
     - name: Install dependencies
       run: |
@@ -29,4 +29,4 @@ jobs:
         DB_HOST: ${{ secrets.DB_HOST }}
         DB_PORT: ${{ secrets.DB_PORT }}
       run: |
-        python path/to/your_script.py
+        python trading.py  # 
